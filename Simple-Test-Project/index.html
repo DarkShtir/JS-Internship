@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>Test-Task</title>
+</head>
+<body>
+
+    <form class="pure-form pure-form-stacked form-login">
+        <fieldset>
+            <legend>Регистрация нового пользователя</legend>
+    
+            <label for="firstName">Имя</label>
+            <input id="firstName" type="text" placeholder="firstName">
+    
+            <label for="lastName">Фамилия</label>
+            <input id="lastName" type="text" placeholder="lastName">
+    
+            <label for="level">Уровень сложности</label>
+            <select id="level">
+                <option>EASY</option>
+                <option>MEDIUM</option>
+                <option>HARD</option>
+            </select>
+        
+            <button type="submit" class="pure-button pure-button-primary">Начать тест</button>
+        </fieldset>
+    </form>
+
+    <div class="wrapper form-test hidden">
+        <div class="question">Тут будет вопрос</div>
+        <button class="pure-button answer-1 answer-btn">Ответ 1</button>
+        <button class="pure-button answer-2 answer-btn">Ответ 2</button>
+        <button class="pure-button answer-3 answer-btn">Ответ 3</button>
+        <button class="pure-button answer-4 answer-btn">Ответ 4</button>
+        <button class="pure-button next">Следующий вопрос</button>
+    </div>
+    
+    <div class="finish-game">
+        <form class="finish-form hidden"></form>
+        <button class="pure-button pure-button-primary new-game-btn hidden">Начать новую игру</button>
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>

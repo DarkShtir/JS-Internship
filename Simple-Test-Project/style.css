@@ -1,0 +1,46 @@
+.pure-form{
+    display: flex;
+    justify-content: center;
+}
+.question{
+    width:800px;
+    height: 100px;
+    margin: 10px auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+}
+.answer-btn, .next{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px auto;
+}
+.pure-button-primary{
+    display: flex;
+    margin: 0 auto;
+}
+.button-success, .button-error, .button-warning {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.button-error {
+    background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.button-warning {
+    background: rgb(223, 117, 20); /* this is an orange */
+}
+.finish-form{
+    margin: 150px auto;
+    font-size: 25px;
+    width: 600px;
+    text-align: center;
+}
