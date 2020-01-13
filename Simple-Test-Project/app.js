@@ -124,7 +124,6 @@ class Controller extends EventEmmiter {
 		}
 	}
 	createNewUserListener() {
-		console.log('запустился Метод создания Юзера КОНТРОЛЛЕР');
 		let formBtn = document.querySelector('.form-login');
 		formBtn.addEventListener('click', e => {
 			e.preventDefault();
@@ -142,18 +141,18 @@ class Controller extends EventEmmiter {
 	listenerQuestionForm(e) {
 		e.preventDefault();
 		let answerBtn = document.querySelectorAll('.answer-btn');
-		// answerBtn.forEach(value => {
-		// 	value.classList.contains();
-		// });
-		if (e.target.classList.contains('answer-1')) {
-			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
-		} else if (e.target.classList.contains('answer-2')) {
-			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
-		} else if (e.target.classList.contains('answer-3')) {
-			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
-		} else if (e.target.classList.contains('answer-4')) {
-			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
-		} else if (e.target.classList.contains('next')) {
+		answerBtn.forEach((value, index) => {
+			if (
+				value.classList.contains(`answer-${index + 1}`) ===
+				e.target.classList.contains(`answer-${index + 1}`)
+			) {
+				this.model.checkAnswer(
+					e.target.textContent,
+					this.numberQuestion
+				);
+			}
+		});
+		if (e.target.classList.contains('next')) {
 			this.renderQuestion(this.numberQuestion);
 			console.log('Теперь ты нажимаешь на клавишу СЛЕДУЮЩИЙ ВОПРОС');
 		}
@@ -169,7 +168,6 @@ class Controller extends EventEmmiter {
 		}
 		let level = document.querySelector('#level').value;
 		this.model.createNewUser(firstName, lastName, level);
-		console.log('запустился Метод создания Юзера МОДЕЛЬ');
 		this.createQuestion();
 	}
 	createQuestion() {
