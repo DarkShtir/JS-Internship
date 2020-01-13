@@ -310,7 +310,7 @@ class Model extends EventEmmiter {
 	createNewUser(firstName = 'Неизвестный', lastName = 'Опоссум', level) {
 		const newUser = new User(firstName, lastName);
 		newUser.setLevel(level);
-		this.userArr.push(newUser);
+		this.userArr.unshift(newUser);
 	}
 	createArrOfQuestion() {
 		taskArr.forEach(element => {
@@ -362,6 +362,7 @@ class Controller extends EventEmmiter {
 		this.view = view;
 		this.amountQuestions = 0;
 		this.numberQuestion = 0;
+		this.amountGames = 0;
 		model.on('trueAnswer', answer => {
 			this.trueAnswer(answer);
 		});
@@ -370,69 +371,121 @@ class Controller extends EventEmmiter {
 		});
 	}
 	start() {
+		if (this.numberQuestion === 0 && this.amountGames === 0) {
+			this.createNewUserListener();
+			this.createAndControlQuestionForm();
+		} else {
+			this.model.arrOfQuestion = [];
+		}
+	}
+	createQuestion() {
+		this.model.createArrOfQuestion();
+		console.log('запустился Метод создания Вопросов МОДЕЛЬ');
+		this.view.toggleFormVisibility();
+		this.view.toggleQuestionVisibility();
+		console.log('Переключилась видимость Форм');
+		this.getAmountQuestions();
+		console.log('получено количество вопросов');
+		this.renderQuestion(this.numberQuestion);
+		console.log('вопросы рендярятся');
+	}
+	createNewUserListener() {
+		console.log('запустился Метод создания Юзера КОНТРОЛЛЕР');
 		let formBtn = document.querySelector('.form-login');
 		formBtn.addEventListener('click', e => {
 			e.preventDefault();
-			if (e.target.tagName === 'BUTTON' && this.numberQuestion === 0) {
-				let firstName = document.querySelector('#firstName').value;
-				if (firstName === '') {
-					firstName = 'Неопознанный';
-				}
-				let lastName = document.querySelector('#lastName').value;
-				if (lastName === '') {
-					lastName = 'Опоссум';
-				}
-				let level = document.querySelector('#level').value;
-				this.model.createNewUser(firstName, lastName, level);
-				this.model.createArrOfQuestion();
-				this.view.hiddenForm();
-				this.view.showQuestion();
-				this.getAmountQuestions();
-				this.renderQuestion(this.numberQuestion);
+			if (e.target.tagName === 'BUTTON') {
+				this.createNewUser();
 			}
 		});
+	}
+	createNewUser() {
+		let firstName = document.querySelector('#firstName').value;
+		if (firstName === '') {
+			firstName = 'Неопознанный';
+		}
+		let lastName = document.querySelector('#lastName').value;
+		if (lastName === '') {
+			lastName = 'Опоссум';
+		}
+		let level = document.querySelector('#level').value;
+		this.model.createNewUser(firstName, lastName, level);
+		console.log('запустился Метод создания Юзера МОДЕЛЬ');
+		this.createQuestion();
+	}
+
+	createAndControlQuestionForm() {
 		let questionBtn = document.querySelector('.form-test');
 		questionBtn.addEventListener('click', e => {
-			e.preventDefault();
-			if (e.target.classList.contains('answer-1')) {
-				this.model.checkAnswer(
-					e.target.textContent,
-					this.numberQuestion
-				);
-			} else if (e.target.classList.contains('answer-2')) {
-				this.model.checkAnswer(
-					e.target.textContent,
-					this.numberQuestion
-				);
-			} else if (e.target.classList.contains('answer-3')) {
-				this.model.checkAnswer(
-					e.target.textContent,
-					this.numberQuestion
-				);
-			} else if (e.target.classList.contains('answer-4')) {
-				this.model.checkAnswer(
-					e.target.textContent,
-					this.numberQuestion
-				);
-			} else if (e.target.classList.contains('next')) {
-				this.renderQuestion(this.numberQuestion);
-				console.log('Теперь ты нажимаешь на клавишу СЛЕДУЮЩИЙ ВОПРОС');
-			}
+			this.listenerQuestionForm(e);
 		});
+		// questionBtn.addEventListener('click', e => {
+		// 	e.preventDefault();
+		// 	if (e.target.classList.contains('answer-1')) {
+		// 		this.model.checkAnswer(
+		// 			e.target.textContent,
+		// 			this.numberQuestion
+		// 		);
+		// 	} else if (e.target.classList.contains('answer-2')) {
+		// 		this.model.checkAnswer(
+		// 			e.target.textContent,
+		// 			this.numberQuestion
+		// 		);
+		// 	} else if (e.target.classList.contains('answer-3')) {
+		// 		this.model.checkAnswer(
+		// 			e.target.textContent,
+		// 			this.numberQuestion
+		// 		);
+		// 	} else if (e.target.classList.contains('answer-4')) {
+		// 		this.model.checkAnswer(
+		// 			e.target.textContent,
+		// 			this.numberQuestion
+		// 		);
+		// 	} else if (e.target.classList.contains('next')) {
+		// 		this.renderQuestion(this.numberQuestion);
+		// 		console.log('Теперь ты нажимаешь на клавишу СЛЕДУЮЩИЙ ВОПРОС');
+		// 	}
+		// });
+	}
+	listenerQuestionForm(e) {
+		e.preventDefault();
+		if (e.target.classList.contains('answer-1')) {
+			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
+		} else if (e.target.classList.contains('answer-2')) {
+			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
+		} else if (e.target.classList.contains('answer-3')) {
+			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
+		} else if (e.target.classList.contains('answer-4')) {
+			this.model.checkAnswer(e.target.textContent, this.numberQuestion);
+		} else if (e.target.classList.contains('next')) {
+			this.renderQuestion(this.numberQuestion);
+			console.log('Теперь ты нажимаешь на клавишу СЛЕДУЮЩИЙ ВОПРОС');
+		}
 	}
 	newGame() {
-		let newGameBtn = document.querySelector('.finish-game');
-		newGameBtn.addEventListener('click', e => {
-			e.preventDefault();
-			if (e.target.classList.contains('new-game-btn')) {
-				location.reload(true);
-				// console.log('Нажал клавишу новая игра');
-				// this.numberQuestion = 0;
-				// this.amountQuestions = 0;
-				// this.start();
-			}
-		});
+		if (this.amountGames === 0) {
+			let newGameBtn = document.querySelector('.finish-game');
+			newGameBtn.addEventListener('click', e => {
+				e.preventDefault();
+				if (e.target.classList.contains('new-game-btn')) {
+					// location.reload(true);
+					// console.log('Нажал клавишу новая игра');
+					this.amountGames++;
+					this.numberQuestion = 0;
+					this.amountQuestions = 0;
+					this.view.newGame();
+					// this.removeEventListenerFromQuestionForm();
+					this.start();
+				}
+			});
+		}
 	}
+	// removeEventListenerFromQuestionForm() {
+	// 	let questionBtn = document.querySelector('.form-test');
+	// 	questionBtn.removeEventListener('click', e => {
+	// 		this.listenerQuestionForm(e);
+	// 	});
+	// }
 	getAmountQuestions() {
 		this.amountQuestions = this.model.arrOfQuestion.length;
 	}
@@ -521,23 +574,36 @@ class View {
 		nextBtn.classList.remove('pure-button-disabled');
 	}
 	finishGame(fullName, points) {
+		this.toggleFinishFormVisibility();
+		this.toggleQuestionVisibility();
 		let finishForm = document.querySelector('.finish-form');
-		let newGameBtn = document.querySelector('.new-game-btn');
-
-		newGameBtn.classList.remove('hidden');
-		finishForm.classList.remove('hidden');
-		this.hiddenQuestion();
 		finishForm.textContent = `Пользователь ${fullName} правильно ответил на ${points}% вопросов!`;
 	}
-	hiddenForm() {
-		document.querySelector('.form-login').classList.add('hidden');
+	newGame() {
+		this.toggleFinishFormVisibility();
+		this.toggleFormVisibility();
 	}
-	showQuestion() {
-		document.querySelector('.form-test').classList.remove('hidden');
+	toggleFinishFormVisibility() {
+		let finishForm = document.querySelector('.finish-form');
+		let newGameBtn = document.querySelector('.new-game-btn');
+		finishForm.classList.toggle('hidden');
+		newGameBtn.classList.toggle('hidden');
 	}
-	hiddenQuestion() {
-		document.querySelector('.form-test').classList.add('hidden');
+	toggleFormVisibility() {
+		document.querySelector('.form-login').classList.toggle('hidden');
 	}
+	toggleQuestionVisibility() {
+		document.querySelector('.form-test').classList.toggle('hidden');
+	}
+	// hiddenForm() {
+	// 	document.querySelector('.form-login').classList.add('hidden');
+	// }
+	// showQuestion() {
+	// 	document.querySelector('.form-test').classList.remove('hidden');
+	// }
+	// hiddenQuestion() {
+	// 	document.querySelector('.form-test').classList.add('hidden');
+	// }
 }
 const view = new View();
 const model = new Model();
