@@ -1,6 +1,7 @@
 .pure-form{
     display: flex;
     justify-content: center;
+    text-align: -webkit-center;
 }
 .question{
     width:800px;
