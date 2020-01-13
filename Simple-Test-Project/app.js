@@ -37,6 +37,7 @@ class User {
 }
 
 class Task {
+	//Для будущего создания заданий через браузер
 	constructor(level, question, countAnswers) {
 		this.level = level;
 		this.question = question;
@@ -172,7 +173,7 @@ class Controller extends EventEmmiter {
 	}
 	createQuestion() {
 		this.model.createArrOfQuestion();
-		this.view.toggleFormVisibility();
+		this.view.toggleFormLoginVisibility();
 		this.view.toggleQuestionVisibility();
 		this.getAmountQuestions();
 		this.renderQuestion(this.numberQuestion);
@@ -287,7 +288,7 @@ class View {
 	}
 	newGame() {
 		this.toggleFinishFormVisibility();
-		this.toggleFormVisibility();
+		this.toggleFormLoginVisibility();
 	}
 	toggleFinishFormVisibility() {
 		let finishForm = document.querySelector('.finish-form');
@@ -295,21 +296,12 @@ class View {
 		finishForm.classList.toggle('hidden');
 		newGameBtn.classList.toggle('hidden');
 	}
-	toggleFormVisibility() {
+	toggleFormLoginVisibility() {
 		document.querySelector('.form-login').classList.toggle('hidden');
 	}
 	toggleQuestionVisibility() {
 		document.querySelector('.form-test').classList.toggle('hidden');
 	}
-	// hiddenForm() {
-	// 	document.querySelector('.form-login').classList.add('hidden');
-	// }
-	// showQuestion() {
-	// 	document.querySelector('.form-test').classList.remove('hidden');
-	// }
-	// hiddenQuestion() {
-	// 	document.querySelector('.form-test').classList.add('hidden');
-	// }
 }
 const view = new View();
 const model = new Model();
