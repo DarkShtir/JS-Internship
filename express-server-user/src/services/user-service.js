@@ -100,6 +100,39 @@ class UserService {
 		return await this.user;
 		// return await User.findById(id);
 	};
+	del = async function(id) {
+		let newArr = [];
+		let myPath = path.join('src', 'db', 'user-db.json');
+		if (this.arrUsers.length === 0) {
+			this.arrUsers = JSON.parse(fs.readFileSync(myPath));
+			this.arrUsers.forEach(element => {
+				for (const key in element) {
+					if (key === 'id' && element[key] !== id) {
+						newArr.push(element);
+					}
+				}
+			});
+			this.arrUsers = newArr;
+			newArr = JSON.stringify(newArr, null, ' ');
+			fs.writeFile(myPath, newArr, err => {
+				console.log(err);
+			});
+		} else {
+			this.arrUsers.forEach(element => {
+				for (const key in element) {
+					if (key === 'id' && element[key] !== id) {
+						newArr.push(element);
+					}
+				}
+			});
+			this.arrUsers = newArr;
+			newArr = JSON.stringify(this.arrUsers, null, ' ');
+			fs.writeFile(myPath, newArr, err => {
+				console.log(err);
+			});
+		}
+		// return await User.findById(id);
+	};
 }
 
 module.exports = UserService;
