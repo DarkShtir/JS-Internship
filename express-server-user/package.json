@@ -1,0 +1,19 @@
+{
+  "name": "express-server-user",
+  "version": "1.0.0",
+  "description": "Server on node.js/express",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DarkShtir/JS-Internship/tree/master/express-server-user"
+  },
+  "author": "Andrew Muliou",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
