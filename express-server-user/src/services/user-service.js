@@ -1,136 +1,62 @@
 // const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
+const UserModel = require('../models/user');
+const user_model = new UserModel();
 
 class UserService {
 	constructor() {
 		this.arrUsers = [];
 		this.user;
+		this.myPath;
 	}
+	myPath = path.join('src', 'db', 'user-db.json');
+
 	add = async function(body) {
 		let newArr;
 		if (this.arrUsers.length === 0) {
-			let myPath = path.join('src', 'db', 'user-db.json');
-			this.arrUsers = JSON.parse(fs.readFileSync(myPath));
-			this.arrUsers.push(body);
-			newArr = JSON.stringify(this.arrUsers, null, ' ');
-			fs.writeFile(myPath, newArr, err => {
-				console.log(err);
-			});
-		} else {
-			this.arrUsers.push(body);
-			console.log(this.arrUsers);
-			newArr = JSON.stringify(this.arrUsers, null, ' ');
-			fs.writeFile(myPath, newArr, err => {
-				console.log(err);
-			});
+			this.get();
 		}
-
-		// let myPath = path.join('src', 'db', 'user-db.json');
-		// let newBody = JSON.stringify(body);
-
-		// const user = new User(body);
-		// await user.save();
-		// return { user };
-		console.log('Сработал ADD запрос');
+		newArr = user_model.add(this.arrUsers, body);
+		fs.writeFile(this.myPath, newArr, err => {
+			console.log(err);
+		});
 	};
 
 	get = async function() {
-		let myPath = path.join('src', 'db', 'user-db.json');
-		this.arrUsers = JSON.parse(fs.readFileSync(myPath));
-		// fs.readFile(myPath, 'utf-8', (err, data) => {
-		// 	// if (err) throw err;
-		// 	this.arrUsers = JSON.parse(data);
-		// });
+		if (this.arrUsers.length === 0) {
+			this.arrUsers = JSON.parse(fs.readFileSync(this.myPath));
+		}
 		return await this.arrUsers;
 	};
 
 	update = async function(id, body) {
 		let newArr;
-		let myPath = path.join('src', 'db', 'user-db.json');
 		if (this.arrUsers.length === 0) {
 			this.get();
-			this.arrUsers.forEach(element => {
-				for (const key in element) {
-					if (key === 'id' && element[key] === id) {
-						element = Object.assign(element, body);
-					}
-				}
-			});
-			newArr = JSON.stringify(this.arrUsers, null, ' ');
-			fs.writeFile(myPath, newArr, err => {
-				console.log(err);
-			});
-		} else {
-			this.arrUsers.forEach(element => {
-				for (const key in element) {
-					if (key === 'id' && element[key] === id) {
-						element = Object.assign(element, body);
-					}
-				}
-			});
-			newArr = JSON.stringify(this.arrUsers, null, ' ');
-			fs.writeFile(myPath, newArr, err => {
-				console.log(err);
-			});
 		}
+		newArr = user_model.update(this.arrUsers, id, body);
+		fs.writeFile(this.myPath, newArr, err => {
+			console.log(err);
+		});
 		// return await User.findByIdAndUpdate(id, body);
-		console.log('Сработал PUT запрос');
 	};
 
 	getById = async function(id) {
 		if (this.arrUsers.length === 0) {
 			this.get();
-			this.arrUsers.forEach(element => {
-				for (const key in element) {
-					if (key === 'id' && element[key] === id) {
-						this.user = element;
-					}
-				}
-			});
-		} else {
-			this.arrUsers.forEach(element => {
-				for (const key in element) {
-					if (key === 'id' && element[key] === id) {
-						this.user = element;
-					}
-				}
-			});
 		}
-		return await this.user;
-		// return await User.findById(id);
+		return await user_model.getById(this.arrUsers, id);
 	};
 	del = async function(id) {
-		let newArr = [];
-		let myPath = path.join('src', 'db', 'user-db.json');
 		if (this.arrUsers.length === 0) {
-			this.arrUsers = JSON.parse(fs.readFileSync(myPath));
-			this.arrUsers.forEach(element => {
-				for (const key in element) {
-					if (key === 'id' && element[key] !== id) {
-						newArr.push(element);
-					}
-				}
-			});
-			this.arrUsers = newArr;
-			newArr = JSON.stringify(newArr, null, ' ');
-			fs.writeFile(myPath, newArr, err => {
-				console.log(err);
-			});
-		} else {
-			this.arrUsers.forEach(element => {
-				for (const key in element) {
-					if (key === 'id' && element[key] !== id) {
-						newArr.push(element);
-					}
-				}
-			});
-			this.arrUsers = newArr;
-			newArr = JSON.stringify(this.arrUsers, null, ' ');
-			fs.writeFile(myPath, newArr, err => {
-				console.log(err);
-			});
+			this.get();
 		}
+
+		this.arrUsers = user_model.del(this.arrUsers, id);
+		fs.writeFile(this.myPath, this.arrUsers, err => {
+			console.log(err);
+		});
 		// return await User.findById(id);
 	};
 }
