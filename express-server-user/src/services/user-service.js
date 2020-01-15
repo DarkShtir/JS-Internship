@@ -10,7 +10,7 @@ class UserService {
 		this.user;
 		this.myPath;
 	}
-	myPath = path.join('src', 'db', 'user-db.json');
+	myPath = path.join(__dirname, '..', 'db', 'user-db.json');
 
 	add = async function(body) {
 		let newArr;
