@@ -1,63 +1,52 @@
-// const User = require('../models/user');
-const fs = require('fs');
-const path = require('path');
-const UserModel = require('../models/user');
-const user_model = new UserModel();
+const User = require('../models/user');
 
 class UserService {
-	constructor() {
-		this.arrUsers = [];
-		this.user;
-		this.myPath;
-	}
-	myPath = path.join(__dirname, '..', 'db', 'user-db.json');
+	constructor() {}
 
 	add = async function(body) {
-		let newArr;
-		if (this.arrUsers.length === 0) {
-			this.get();
+		const user = new User(body);
+		try {
+			await user.save();
+			return user;
+		} catch (error) {
+			console.log(error);
+			return `Не удалось добавить пользователя!`;
 		}
-		newArr = user_model.add(this.arrUsers, body);
-		fs.writeFile(this.myPath, newArr, err => {
-			console.log(err);
-		});
 	};
 
 	get = async function() {
-		if (this.arrUsers.length === 0) {
-			this.arrUsers = JSON.parse(fs.readFileSync(this.myPath));
+		try {
+			return await User.find({});
+		} catch (error) {
+			console.log(error);
+			return `Пользователей получить не удалось!`;
 		}
-		return await this.arrUsers;
 	};
 
 	update = async function(id, body) {
-		let newArr;
-		if (this.arrUsers.length === 0) {
-			this.get();
+		try {
+			return await User.findByIdAndUpdate(id, body);
+		} catch (error) {
+			console.log(error);
+			return `Пользователя с данным ID ${id}, не найдено!!!`;
 		}
-		newArr = user_model.update(this.arrUsers, id, body);
-		fs.writeFile(this.myPath, newArr, err => {
-			console.log(err);
-		});
-		// return await User.findByIdAndUpdate(id, body);
 	};
 
 	getById = async function(id) {
-		if (this.arrUsers.length === 0) {
-			this.get();
+		try {
+			return await User.findById(id);
+		} catch (error) {
+			console.log(error);
+			return `Пользователя с данным ID ${id}, не найдено!!!`;
 		}
-		return await user_model.getById(this.arrUsers, id);
 	};
-	del = async function(id) {
-		if (this.arrUsers.length === 0) {
-			this.get();
-		}
 
-		this.arrUsers = user_model.del(this.arrUsers, id);
-		fs.writeFile(this.myPath, this.arrUsers, err => {
-			console.log(err);
-		});
-		// return await User.findById(id);
+	del = async function(id) {
+		try {
+			await User.deleteOne({ _id: id });
+		} catch (error) {
+			console.log(error);
+		}
 	};
 }
 
