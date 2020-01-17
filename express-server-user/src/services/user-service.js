@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Pets = require('../models/pet');
+const mongoose = require('mongoose');
 
 class UserService {
 	constructor() {}
@@ -40,7 +42,39 @@ class UserService {
 			return `Пользователя с данным ID ${id}, не найдено!!!`;
 		}
 	};
-
+	getUserPets = async function(id) {
+		try {
+			return await Pets.find({ ownerId: id }).select({
+				_id: 1,
+				name: 1,
+				species: 1,
+			});
+		} catch (error) {
+			console.log(error);
+			return `Пользователя с данным ID ${id}, не найдено!!!`;
+		}
+	};
+	getUserWithAllPets = async function(id) {
+		try {
+			const myId = '' + id;
+			return await User.aggregate([
+				{
+					$lookup: {
+						from: 'pets',
+						localField: '_id',
+						foreignField: 'ownerId',
+						as: 'pets',
+					},
+				},
+				{
+					$match: { _id: mongoose.Types.ObjectId(id) },
+				},
+			]);
+		} catch (error) {
+			console.log(error);
+			return `Пользователя с данным ID ${id}, не найдено!!!`;
+		}
+	};
 	del = async function(id) {
 		try {
 			await User.deleteOne({ _id: id });
