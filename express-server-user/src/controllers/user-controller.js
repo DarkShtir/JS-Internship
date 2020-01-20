@@ -59,5 +59,24 @@ class UserController {
 			res.status(400).send({ error: e.message });
 		}
 	};
+	login = async (req, res) => {
+		try {
+			const result = await user_service.login(
+				req.body.login,
+				req.body.password
+			);
+			res.status(201).send(result);
+		} catch (e) {
+			res.status(400).send({ error: e.message });
+		}
+	};
+	logout = async (req, res) => {
+		try {
+			await user_service.logout(req);
+			res.send({ responce: 'successfully logout' });
+		} catch (e) {
+			res.status(400).send({ error: e.message });
+		}
+	};
 }
 module.exports = UserController;

@@ -9,7 +9,8 @@ class UserService {
 		const user = new User(body);
 		try {
 			await user.save();
-			return user;
+			const token = await user.generateAuthToken();
+			return { user, token };
 		} catch (error) {
 			console.log(error);
 			return `Не удалось добавить пользователя!`;
@@ -56,8 +57,10 @@ class UserService {
 	};
 	getUserWithAllPets = async function(id) {
 		try {
-			const myId = '' + id;
 			return await User.aggregate([
+				{
+					$match: { _id: mongoose.Types.ObjectId(id) },
+				},
 				{
 					$lookup: {
 						from: 'pets',
@@ -65,9 +68,6 @@ class UserService {
 						foreignField: 'ownerId',
 						as: 'pets',
 					},
-				},
-				{
-					$match: { _id: mongoose.Types.ObjectId(id) },
 				},
 			]);
 		} catch (error) {
@@ -81,6 +81,17 @@ class UserService {
 		} catch (error) {
 			console.log(error);
 		}
+	};
+	login = async function(login, password) {
+		const user = await User.findByCredentials(login, password);
+		const token = await user.generateAuthToken();
+		return { user, token };
+	};
+	logout = async function(req) {
+		req.user.tokens = req.user.tokens.filter(token => {
+			return token.token !== req.token;
+		});
+		await req.user.save();
 	};
 }
 

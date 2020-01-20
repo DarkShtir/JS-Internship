@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = require('./routers/export-router');
+require('dotenv').config({ path: './config/dev.env' });
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -11,7 +12,8 @@ app.use('/pets', router.petRouter);
 
 async function start() {
 	try {
-		await mongoose.connect('mongodb://localhost:27017/Users', {
+		await mongoose.connect(process.env.MONGO_DB, {
+			useCreateIndex: true,
 			useNewUrlParser: true,
 			useFindAndModify: false,
 			useUnifiedTopology: true,
