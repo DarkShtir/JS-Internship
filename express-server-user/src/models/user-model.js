@@ -1,6 +1,9 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Pets = require('../models/pet-model');
+require('dotenv').config({ path: './config/dev.env' });
+const mongoose = require('mongoose');
 
 const userSchema = new Schema({
 	login: {
@@ -65,7 +68,10 @@ userSchema.statics.findByCredentials = async (login, password) => {
 
 userSchema.methods.generateAuthToken = async function() {
 	const user = this;
-	const token = jwt.sign({ _id: user._id.toString() }, 'expressapp');
+	const token = jwt.sign(
+		{ _id: user._id.toString() },
+		process.env.MY_BIG_SECRET_PHRASE
+	);
 	user.tokens = user.tokens.concat({ token });
 	user.save();
 
@@ -77,6 +83,17 @@ userSchema.pre('save', async function(next) {
 	if (user.isModified('password')) {
 		user.password = await bcrypt.hash(user.password, 8);
 	}
+	next();
+});
+userSchema.pre('deleteOne', async function(next) {
+	const user = this;
+	console.log(user);
+	await Pets.deleteMany(
+		{ ownerId: new mongoose.Types.ObjectId(user._id) },
+		function(err) {
+			if (err) return handleError(err);
+		}
+	);
 	next();
 });
 

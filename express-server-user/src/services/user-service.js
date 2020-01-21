@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const Pets = require('../models/pet');
+const User = require('../models/user-model');
+const Pets = require('../models/pet-model');
 const mongoose = require('mongoose');
 
 class UserService {
