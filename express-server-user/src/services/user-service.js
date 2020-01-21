@@ -77,6 +77,7 @@ class UserService {
 	};
 	del = async function(id) {
 		try {
+			await Pets.deleteMany({ ownerId: id });
 			await User.deleteOne({ _id: id });
 		} catch (error) {
 			console.log(error);

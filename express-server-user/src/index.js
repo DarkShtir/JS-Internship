@@ -9,6 +9,7 @@ const port = process.env.PORT || 8080;
 app.use(express.json());
 app.use('/users', router.userRouter);
 app.use('/pets', router.petRouter);
+app.use('/upload', router.fileRouter);
 
 async function start() {
 	try {
