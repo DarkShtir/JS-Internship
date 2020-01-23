@@ -1,5 +1,7 @@
 const express = require('express');
 const auth = require('../middleware/auth');
+const valid = require('../middleware/validation/validation');
+const userValid = require('../middleware/validation/user-validation');
 
 const UserController = require('../controllers/user-controller');
 const user_controller = new UserController();
@@ -7,7 +9,7 @@ const user_controller = new UserController();
 const router = new express.Router();
 
 router.get('/', user_controller.getUser);
-router.post('/', user_controller.addUser);
+router.post('/', valid(userValid), user_controller.addUser);
 router.get('/:id', user_controller.getUserId);
 router.get('/:id/pets', auth, user_controller.getUserPets);
 router.get('/:id/all_pets', auth, user_controller.getUserWithAllPets);

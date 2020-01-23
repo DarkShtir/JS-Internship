@@ -48,6 +48,9 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	phone: {
+		type: String,
+	},
 });
 
 userSchema.statics.findByCredentials = async (login, password) => {

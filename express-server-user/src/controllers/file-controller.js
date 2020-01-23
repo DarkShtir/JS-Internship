@@ -12,5 +12,9 @@ class FileController {
 			res.send('Файл загружен!');
 		}
 	}
+	uploadFromBody(req, res) {
+		console.log(req.body);
+		const fileData = req.body;
+	}
 }
 module.exports = FileController;
