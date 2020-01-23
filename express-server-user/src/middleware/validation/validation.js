@@ -1,7 +1,6 @@
 const validation = function(validModule) {
 	return async (req, res, next) => {
 		try {
-			console.log('Я запустил вункцию валидации');
 			const result = await validModule.validateAsync(req.body);
 			if (!result) {
 				throw new Error();

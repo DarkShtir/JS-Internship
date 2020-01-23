@@ -26,4 +26,5 @@ const myPath = path.join(__dirname, '../', '/public');
 
 router.use('/static', express.static(myPath));
 router.post('/', upload.single('myImage'), file_controller.upload);
+router.get('/:fileName', file_controller.getFile(myPath));
 module.exports = router;
