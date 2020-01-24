@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js",
+    "start:dev": "ENV=dev nodemon src/index.js",
+    "start:prod": "ENV=prod nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
