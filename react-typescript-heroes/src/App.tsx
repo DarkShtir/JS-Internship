@@ -1,67 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar } from './components/Navbar';
-import { ToDoForm } from './components/ToDoForm';
-import { TodoList } from './components/TodoList';
-import { ITodo } from './interfaces';
+import * as React from 'react';
+import './App.css';
+import { Switch, Route, withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import Home from './components/Home';
+import Create from './components/customer/Create';
+import EditCustomer from './components/customer/Edit';
 
-declare var confirm: (question: string) => boolean;
+class App extends React.Component<RouteComponentProps<any>> {
+  public render() {
+    return (
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to={'/'}> Home </Link>
+            </li>
 
-const App: React.FC = () => {
-	const [todos, setTodos] = useState<ITodo[]>([]);
+            <li>
+              <Link to={'/create'}> Create Customer </Link>
+            </li>
+          </ul>
+        </nav>
 
-	useEffect(() => {
-		const saved = JSON.parse(localStorage.getItem('todos') || '[]') as ITodo[];
-		setTodos(saved);
-	}, []);
+        <Switch>
+          <Route path={'/'} exact component={Home} />
+          <Route path={'/create'} exact component={Create} />
+          <Route path={'/edit/:id'} exact component={EditCustomer} />
+        </Switch>
+      </div>
+    );
+  }
+}
 
-	useEffect(()=>{
-		localStorage.setItem('todos', JSON.stringify(todos))
-	},[todos])
-
-	const addHandler = (title: string) => {
-		const newTodo: ITodo = {
-			title: title,
-			id: Date.now(),
-			completed: false,
-		};
-		// setTodos([newTodo, ...todos]);
-		setTodos(prev => [newTodo, ...prev]);
-	};
-
-	const toggleHandler = (id: number) => {
-		setTodos(prev =>
-			prev.map(todo => {
-				if (todo.id === id) {
-					todo.completed = !todo.completed;
-				}
-				return todo;
-			})
-		);
-	};
-
-	const removeHandler = (id: number) => {
-		const shouldRemove = confirm(
-			'Вы уверены что хотите удалить элемент???'
-		);
-		if (shouldRemove) {
-			setTodos(prev => prev.filter(todo => todo.id !== id));
-		}
-	};
-
-	return (
-		<>
-			<Navbar />
-			<div className="container">
-				<ToDoForm onAdd={addHandler} />
-
-				<TodoList
-					todos={todos}
-					onToggle={toggleHandler}
-					onRemove={removeHandler}
-				/>
-			</div>
-		</>
-	);
-};
-
-export default App;
+export default withRouter(App);
