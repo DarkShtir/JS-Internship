@@ -3,8 +3,11 @@ const mongoose = require('mongoose');
 const router = require('./routers/export-router');
 require('dotenv').config({ path: './config/' + process.env.ENV + '.env' });
 const app = express();
+const cors = require('cors');
 const port = process.env.PORT || 8080;
 
+// const corsOptions = { origin: `http://localhost:3000/` };
+app.use(cors());
 app.use(express.json());
 app.use('/users', router.userRouter);
 app.use('/pets', router.petRouter);
