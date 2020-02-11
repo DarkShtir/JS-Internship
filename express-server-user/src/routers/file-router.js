@@ -14,17 +14,14 @@ const storageConfig = multer.diskStorage({
 		cb(
 			null,
 			(filename =
-				file.fieldname +
-				'-' +
-				Date.now() +
-				path.extname(file.originalname))
+				file.fieldname + '-' + Date.now() + path.extname(file.originalname))
 		);
 	},
 });
 const upload = multer({ storage: storageConfig });
 const myPath = path.join(__dirname, '../', '/public');
 
-router.use('/static', express.static(myPath));
-router.post('/', upload.single('myImage'), file_controller.upload);
+// router.use('/static', express.static(myPath));
+router.post('/', upload.single('avatar'), file_controller.upload);
 router.get('/:fileName', file_controller.getFile(myPath));
 module.exports = router;

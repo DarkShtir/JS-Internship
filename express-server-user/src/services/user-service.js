@@ -26,8 +26,10 @@ class UserService {
 		}
 	};
 
+	//!! сделать изменение пароля
 	update = async function(id, body) {
 		try {
+			console.log(body);
 			return await User.findByIdAndUpdate(id, body);
 		} catch (error) {
 			console.log(error);

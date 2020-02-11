@@ -51,6 +51,13 @@ const userSchema = new Schema({
 	phone: {
 		type: String,
 	},
+	phone: {
+		type: String,
+	},
+	avatarUrl: {
+		type: String,
+		default: 'default_avatar-1581426099358.svg',
+	},
 });
 
 userSchema.statics.findByCredentials = async (login, password) => {
