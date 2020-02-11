@@ -5,7 +5,6 @@ class UserController {
 	constructor() {}
 	getUser = async (req, res) => {
 		try {
-			console.log(req);
 			const result = await user_service.get();
 			res.send(result);
 		} catch (e) {
