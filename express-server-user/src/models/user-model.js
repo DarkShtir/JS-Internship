@@ -51,12 +51,13 @@ const userSchema = new Schema({
 	phone: {
 		type: String,
 	},
-	phone: {
-		type: String,
-	},
 	avatarUrl: {
 		type: String,
 		default: 'default_avatar-1581426099358.svg',
+	},
+	quotes: {
+		type: String,
+		default: 'Автор хотел сказать этим, ровным счётом ничего!',
 	},
 });
 

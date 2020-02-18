@@ -1,7 +1,8 @@
 class FileController {
 	constructor() {}
 	upload(req, res) {
-		console.log(req.file.filename);
+		// console.log(req);
+		// console.log(req.file.filename);
 		const fileData = req.file;
 		if (!fileData) {
 			res.send('Ошибка при загрузке файла!!');
