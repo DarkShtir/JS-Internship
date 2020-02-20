@@ -9,8 +9,8 @@ class PetService {
 			await pet.save();
 			return pet;
 		} catch (error) {
-			console.log(error);
-			return `Не удалось добавить пользователя!`;
+			console.log('Error in Pet service, method add');
+			throw error;
 		}
 	};
 
@@ -18,8 +18,8 @@ class PetService {
 		try {
 			return await Pet.find({}).populate('ownerId');
 		} catch (error) {
-			console.log(error);
-			return `Пользователей получить не удалось!`;
+			console.log('Error in Pet service, method get');
+			throw error;
 		}
 	};
 
@@ -27,8 +27,8 @@ class PetService {
 		try {
 			return await Pet.findByIdAndUpdate(id, body);
 		} catch (error) {
-			console.log(error);
-			return `Пользователя с данным ID ${id}, не найдено!!!`;
+			console.log('Error in Pet service, method update');
+			throw error;
 		}
 	};
 
@@ -36,8 +36,8 @@ class PetService {
 		try {
 			return await Pet.findById(id).populate('ownerId');
 		} catch (error) {
-			console.log(error);
-			return `Пользователя с данным ID ${id}, не найдено!!!`;
+			console.log('Error in Pet service, method getById');
+			throw error;
 		}
 	};
 
@@ -45,7 +45,8 @@ class PetService {
 		try {
 			await Pet.deleteOne({ _id: id });
 		} catch (error) {
-			console.log(error);
+			console.log('Error in Pet service, method del');
+			throw error;
 		}
 	};
 }

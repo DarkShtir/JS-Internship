@@ -12,8 +12,8 @@ class UserService {
 			const token = await user.generateAuthToken();
 			return { user, token };
 		} catch (error) {
-			console.log(error);
-			return `Не удалось добавить пользователя!`;
+			console.log('Error in User service, method add');
+			throw error;
 		}
 	};
 
@@ -21,8 +21,8 @@ class UserService {
 		try {
 			return await User.find({});
 		} catch (error) {
-			console.log(error);
-			return `Пользователей получить не удалось!`;
+			console.log('Error in User service, method get');
+			throw error;
 		}
 	};
 
@@ -31,8 +31,8 @@ class UserService {
 		try {
 			return await User.findByIdAndUpdate(id, body);
 		} catch (error) {
-			console.log(error);
-			return `Пользователя с данным ID ${id}, не найдено!!!`;
+			console.log('Error in User service, method update');
+			throw error;
 		}
 	};
 
@@ -45,7 +45,7 @@ class UserService {
 			return user;
 			// return await User.findById(id);
 		} catch (error) {
-			console.log(error);
+			console.log('Error in User service, method getById');
 			throw error;
 		}
 	};
@@ -58,8 +58,8 @@ class UserService {
 				species: 1,
 			});
 		} catch (error) {
-			console.log(error);
-			return `Пользователя с данным ID ${id}, не найдено!!!`;
+			console.log('Error in User service, method GetUserPets');
+			throw error;
 		}
 	};
 
@@ -79,8 +79,8 @@ class UserService {
 				},
 			]);
 		} catch (error) {
-			console.log(error);
-			return `Пользователя с данным ID ${id}, не найдено!!!`;
+			console.log('Error in User service, method GetUserWithAllPets');
+			throw error;
 		}
 	};
 
@@ -89,7 +89,8 @@ class UserService {
 			await Pets.deleteMany({ ownerId: id });
 			await User.deleteOne({ _id: id });
 		} catch (error) {
-			console.log(error);
+			console.log('Error in User service, method del');
+			throw error;
 		}
 	};
 
