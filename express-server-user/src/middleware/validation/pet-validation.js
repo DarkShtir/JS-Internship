@@ -2,13 +2,13 @@ const Joi = require('@hapi/joi');
 
 const schema = Joi.object({
 	name: Joi.string()
-		.alphanum()
+		.pattern(new RegExp('^[a-zA-Z0-9 ]{3,30}$'))
 		.min(3)
 		.max(30)
 		.required(),
 
 	species: Joi.string()
-		.alphanum()
+		.pattern(new RegExp('^[a-zA-Z0-9 ]{3,30}$'))
 		.min(3)
 		.max(30)
 		.required(),
