@@ -53,7 +53,7 @@ const userSchema = new Schema({
 	},
 	avatarUrl: {
 		type: String,
-		default: 'default_avatar-1581426099358.svg',
+		default: 'http://localhost:8080/static/default_avatar-1581426099358.svg',
 	},
 	quotes: {
 		type: String,
