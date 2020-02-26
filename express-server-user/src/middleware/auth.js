@@ -11,7 +11,7 @@ const auth = async (req, res, next) => {
 			'tokens.token': token,
 		});
 		if (!user) {
-			throw new Error();
+			throw new Error('User not found');
 		}
 		req.token = token;
 		req.user = user;

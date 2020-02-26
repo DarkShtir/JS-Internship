@@ -38,27 +38,27 @@ class AlbumService {
 			if (!album) {
 				throw new Error(`Альбома с данным ID ${id}, не найдено!!!`);
 			}
-			return user;
+			return album;
 		} catch (error) {
 			console.log('Error in Album service, method getById');
 			throw error;
 		}
 	};
 
-	// del = async function(photo) {
-	// 	try {
-	// 		fs.unlinkSync(photo.path, error => {
-	// 			if (error) {
-	// 				throw new Error('Удалить альбом не получилось :(');
-	// 			}
-	// 			console.log('Photo Удалено!');
-	// 		});
-	// 		await Photo.deleteOne({ _id: photo._id });
-	// 	} catch (error) {
-	// 		console.log('Error in Album service, method del');
-	// 		throw error;
-	// 	}
-	// };
+	del = async function(id) {
+		try {
+			// fs.unlinkSync(photo.path, error => {
+			// 	if (error) {
+			// 		throw new Error('Удалить альбом не получилось :(');
+			// 	}
+			// 	console.log('Photo Удалено!');
+			// });
+			await Album.deleteOne({ _id: id });
+		} catch (error) {
+			console.log('Error in Album service, method del');
+			throw error;
+		}
+	};
 }
 
 module.exports = AlbumService;

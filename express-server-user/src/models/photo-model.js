@@ -2,9 +2,8 @@ const { Schema, model } = require('mongoose');
 
 const photoSchema = new Schema(
 	{
-		name: {
+		discription: {
 			type: String,
-			required: true,
 		},
 		ownerId: {
 			type: Schema.Types.ObjectId,

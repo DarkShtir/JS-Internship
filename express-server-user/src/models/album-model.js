@@ -11,9 +11,17 @@ const albumSchema = new Schema(
 			ref: 'User',
 			required: true,
 		},
-		discription: {
+		description: {
 			type: String,
 			default: 'Описания альбома пока нету, но скоро появится!',
+		},
+		privateAlbum: {
+			type: Boolean,
+			default: true,
+		},
+		previewUrl: {
+			type: String,
+			default: 'http://localhost:8080/static/default_album-1582707016442.svg',
 		},
 	},
 	{

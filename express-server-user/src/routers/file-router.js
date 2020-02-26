@@ -41,6 +41,7 @@ const upload = multer({ storage: storageConfig });
 // const myPath = path.join(__dirname, '../', '/public');
 
 // router.use('/static', express.static(myPath));
+// router.post('/', upload.single('default_album'), file_controller.upload);
 router.post('/', upload.single('avatar'), file_controller.upload);
 router.post('/albums/', upload.array('photos'), file_controller.uploadMany);
 // router.get('/:fileName', file_controller.getFile);
