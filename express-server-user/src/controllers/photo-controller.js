@@ -13,7 +13,23 @@ class PhotoController {
 	};
 	addPhoto = async (req, res) => {
 		try {
-			const result = await photo_service.add(req.body);
+			const result = await photo_service.add(
+				req.file,
+				req.body.ownerId,
+				req.body.albumId
+			);
+			res.status(201).send(result);
+		} catch (error) {
+			res.status(400).send({ error: error.message });
+		}
+	};
+	addManyPhoto = async (req, res) => {
+		try {
+			const result = await photo_service.addMany(
+				req.files,
+				req.body.ownerId,
+				req.body.albumId
+			);
 			res.status(201).send(result);
 		} catch (error) {
 			res.status(400).send({ error: error.message });

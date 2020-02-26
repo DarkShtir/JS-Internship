@@ -1,18 +1,19 @@
 const sizeOf = require('image-size');
+const PhotoService = require('./photo-service');
+const photo_service = new PhotoService();
 const Album = require('../models/album-model');
 const Photo = require('../models/photo-model');
 
 class FileService {
 	constructor() {}
 
-	upload(req, res) {
+	upload(file) {
 		try {
-			const fileData = req.file;
+			const fileData = file;
 			if (!fileData) {
 				throw new Error('Ошибка при загрузке файла!!');
-				// res.send('Ошибка при загрузке файла!!');
 			} else {
-				return req.file.filename;
+				return file.filename;
 			}
 		} catch (error) {
 			console.log('Error in file-service, method upload');
@@ -20,10 +21,9 @@ class FileService {
 		}
 	}
 
-	uploadMany = async req => {
-		// const photo = new Photo();
+	uploadMany = async (files, ownerId, albumId) => {
 		try {
-			const arrFiles = req.files;
+			const arrFiles = files;
 			if (!arrFiles) {
 				throw new Error('Ошибка при загрузке файла!!');
 			} else {
@@ -32,27 +32,14 @@ class FileService {
 					const dimension = sizeOf(file.path);
 					const fileObject = {
 						name: file.filename,
-						ownerId: req.body.ownerId,
-						albumId: req.body.albumId,
+						ownerId: ownerId,
+						albumId: albumId,
 						width: dimension.width,
 						height: dimension.height,
 					};
 					fileNames.push(fileObject);
-					// if (!(await Album.findById(albumId))) {
-					// 	const album = new Album({
-					// 		ownerId: req.body.ownerId,
-					// 	});
-					// }
 				});
-
-				// await Photo.insertMany(fileNames, (error, files) => {
-				// 	if (error) {
-				// 		console.log(error);
-				// 		// throw new Error('Error in insertManu methods');
-				// 	} else {
-				// 		console.log('Photos upload');
-				// 	}
-				// });
+				photo_service.addMany(fileNames);
 				return fileNames;
 			}
 		} catch (error) {

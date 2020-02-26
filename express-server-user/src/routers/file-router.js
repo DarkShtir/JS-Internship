@@ -23,8 +23,6 @@ const storageConfig = multer.diskStorage({
 		} else {
 			newPath = path.join(__dirname, '../', '/public', `${ownerId}`);
 		}
-		// cb(null, path.join(__dirname, '../', '/public', `${id}`, `${albumId}`));
-		// console.log(newPath);
 		mkdirp.sync(newPath);
 		cb(null, newPath);
 	},

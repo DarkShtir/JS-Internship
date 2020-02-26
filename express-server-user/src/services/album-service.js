@@ -1,4 +1,8 @@
+const fs = require('fs-extra');
+const path = require('path');
+
 const Album = require('../models/album-model');
+const Photo = require('../models/photo-model');
 
 class AlbumService {
 	constructor() {}
@@ -47,12 +51,21 @@ class AlbumService {
 
 	del = async function(id) {
 		try {
-			// fs.unlinkSync(photo.path, error => {
-			// 	if (error) {
-			// 		throw new Error('Удалить альбом не получилось :(');
-			// 	}
-			// 	console.log('Photo Удалено!');
-			// });
+			const album = await this.getById(id);
+			const newPath = await path.join(
+				__dirname,
+				'../',
+				'/public',
+				`${album.ownerId}`,
+				`${id}`
+			);
+			fs.remove(newPath, error => {
+				if (error) {
+					throw new Error('Удалить album не получилось :(');
+				}
+				console.log('Album Удален!');
+			});
+			await Photo.deleteMany({ albumId: id });
 			await Album.deleteOne({ _id: id });
 		} catch (error) {
 			console.log('Error in Album service, method del');

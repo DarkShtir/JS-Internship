@@ -1,4 +1,3 @@
-const sizeOf = require('image-size');
 const FileService = require('../services/file-service');
 const file_service = new FileService();
 class FileController {
@@ -6,7 +5,7 @@ class FileController {
 
 	upload(req, res) {
 		try {
-			const result = file_service.upload(req);
+			const result = file_service.upload(req.file);
 			res.status(201).send(result);
 		} catch (error) {
 			res.status(400).send({ error: error.message });
@@ -15,7 +14,11 @@ class FileController {
 
 	uploadMany(req, res) {
 		try {
-			const result = file_service.uploadMany(req);
+			const result = file_service.uploadMany(
+				req.files,
+				req.body.ownerId,
+				req.body.albumId
+			);
 			res.status(201).send(result);
 		} catch (error) {
 			res.status(400).send({ error: error.message });

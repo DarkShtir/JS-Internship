@@ -1,15 +1,63 @@
+const sizeOf = require('image-size');
+const fs = require('fs');
+const path = require('path');
+
 const Photo = require('../models/photo-model');
 
 class PhotoService {
 	constructor() {}
 
-	add = async function(body) {
-		const photo = new Photo(body);
+	add = async function(file, ownerId, albumId) {
 		try {
+			if (!file) {
+				throw new Error('Ошибка при загрузке файла!!');
+			}
+			const dimension = sizeOf(file.path);
+			const fileObject = {
+				name: file.filename,
+				ownerId: ownerId,
+				albumId: albumId,
+				width: dimension.width,
+				height: dimension.height,
+			};
+			const photo = new Photo(fileObject);
 			await photo.save();
 			return photo;
 		} catch (error) {
 			console.log('Error in Photo service, method add');
+			throw error;
+		}
+	};
+
+	addMany = async function(files, ownerId, albumId) {
+		try {
+			if (!files) {
+				throw new Error('Ошибка при загрузке файла!!');
+			}
+
+			let fileNames = [];
+			files.map(async file => {
+				const dimension = sizeOf(file.path);
+				const fileObject = {
+					name: file.filename,
+					ownerId: ownerId,
+					albumId: albumId,
+					width: dimension.width,
+					height: dimension.height,
+				};
+				fileNames.push(fileObject);
+			});
+			await Photo.insertMany(fileNames, (error, photo) => {
+				if (error) {
+					console.log(error);
+					throw new Error('Error in addMany methods in photo-service');
+				} else {
+					console.log('Photos upload');
+				}
+			});
+			return fileNames;
+		} catch (error) {
+			console.log('Error in Photo service, method addMany');
 			throw error;
 		}
 	};
@@ -45,15 +93,24 @@ class PhotoService {
 		}
 	};
 
-	del = async function(photo) {
+	del = async function(id) {
 		try {
-			fs.unlinkSync(photo.path, error => {
+			const photo = await this.getById(id);
+			const newPath = await path.join(
+				__dirname,
+				'../',
+				'/public',
+				`${photo.ownerId}`,
+				`${photo.albumId}`,
+				`${photo.name}`
+			);
+			fs.unlink(newPath, error => {
 				if (error) {
 					throw new Error('Удалить photo не получилось :(');
 				}
 				console.log('Photo Удалено!');
 			});
-			await Photo.deleteOne({ _id: photo._id });
+			await Photo.deleteOne({ _id: id });
 		} catch (error) {
 			console.log('Error in Photo service, method del');
 			throw error;
