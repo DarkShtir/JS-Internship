@@ -72,6 +72,15 @@ class AlbumService {
 			throw error;
 		}
 	};
+
+	getAllAlbumsByUserId = async function(id) {
+		try {
+			return await Album.find({ ownerId: id });
+		} catch (error) {
+			console.log('Error in Album service, method getAllAlbumsByUserId');
+			throw error;
+		}
+	};
 }
 
 module.exports = AlbumService;

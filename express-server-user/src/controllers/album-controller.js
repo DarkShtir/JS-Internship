@@ -11,6 +11,14 @@ class AlbumController {
 			res.status(400).send({ error: error.message });
 		}
 	};
+	getAllAlbumsByUserId = async (req, res) => {
+		try {
+			const result = await album_service.getAllAlbumsByUserId(req.params.id);
+			res.status(200).send(result);
+		} catch (error) {
+			res.status(400).send({ error: error.message });
+		}
+	};
 	addAlbum = async (req, res) => {
 		try {
 			const result = await album_service.add(req.body);

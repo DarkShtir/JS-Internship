@@ -8,6 +8,7 @@ const router = new express.Router();
 
 router.get('/', album_controller.getAlbum);
 router.post('/', auth, album_controller.addAlbum);
+router.get('/user/:id', auth, album_controller.getAllAlbumsByUserId);
 router.get('/:id', auth, album_controller.getAlbumId);
 router.put('/:id', auth, album_controller.updateAlbum);
 router.delete('/:id', auth, album_controller.deleteAlbum);
