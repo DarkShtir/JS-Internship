@@ -8,9 +8,9 @@ const user_controller = new UserController();
 
 const router = new express.Router();
 
+router.get('/:id', user_controller.getUserId);
 router.get('/', user_controller.getUser);
 router.post('/', valid(userValid), user_controller.addUser);
-router.get('/:id', user_controller.getUserId);
 router.get('/:id/pets', auth, user_controller.getUserPets);
 router.get('/:id/all_pets', auth, user_controller.getUserWithAllPets);
 router.put('/:id', auth, user_controller.updateUser);

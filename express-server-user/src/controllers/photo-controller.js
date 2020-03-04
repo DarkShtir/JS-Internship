@@ -26,9 +26,9 @@ class PhotoController {
 	addManyPhoto = async (req, res) => {
 		try {
 			const result = await photo_service.addMany(
-				req.files,
 				req.body.ownerId,
-				req.body.albumId
+				req.body.albumId,
+				req.files
 			);
 			res.status(201).send(result);
 		} catch (error) {
@@ -54,6 +54,17 @@ class PhotoController {
 	deletePhoto = async (req, res) => {
 		try {
 			const result = await photo_service.del(req.params.id);
+			res.status(201).send(result);
+		} catch (error) {
+			res.status(400).send({ error: error.message });
+		}
+	};
+	getAllPhotosByAlbumId = async (req, res) => {
+		try {
+			console.log(req.params.albumId);
+			const result = await photo_service.getAllPhotosByAlbumId(
+				req.params.albumId
+			);
 			res.status(201).send(result);
 		} catch (error) {
 			res.status(400).send({ error: error.message });

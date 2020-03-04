@@ -19,6 +19,10 @@ const photoSchema = new Schema(
 			ref: 'Album',
 			required: true,
 		},
+		src: {
+			type: String,
+			required: true,
+		},
 		width: {
 			type: Number,
 			required: true,

@@ -48,6 +48,7 @@ router.post(
 	photo_controller.addManyPhoto
 );
 router.post('/', auth, upload.single('avatar'), photo_controller.addPhoto);
+router.get('/album/:albumId', auth, photo_controller.getAllPhotosByAlbumId);
 router.get('/:id', auth, photo_controller.getPhotoId);
 router.put('/:id', auth, photo_controller.updatePhoto);
 router.delete('/:id', auth, photo_controller.deletePhoto);

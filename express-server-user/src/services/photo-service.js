@@ -29,12 +29,14 @@ class PhotoService {
 		}
 	};
 
-	addMany = async function(files, ownerId, albumId) {
+	addMany = async function(ownerId, albumId, files) {
 		try {
 			if (!files) {
 				throw new Error('Ошибка при загрузке файла!!');
 			}
-
+			// console.log('files:', files);
+			// console.log('ownerId:', ownerId);
+			// console.log('albumId:', albumId);
 			let fileNames = [];
 			files.map(async file => {
 				const dimension = sizeOf(file.path);
@@ -44,6 +46,7 @@ class PhotoService {
 					albumId: albumId,
 					width: dimension.width,
 					height: dimension.height,
+					src: `http://localhost:8080/static/${ownerId}/${albumId}/${file.filename}`,
 				};
 				fileNames.push(fileObject);
 			});
@@ -113,6 +116,15 @@ class PhotoService {
 			await Photo.deleteOne({ _id: id });
 		} catch (error) {
 			console.log('Error in Photo service, method del');
+			throw error;
+		}
+	};
+	getAllPhotosByAlbumId = async function(albumId) {
+		try {
+			console.log(albumId);
+			return await Photo.find({ albumId: albumId });
+		} catch (error) {
+			console.log('Error in Photo service, method getAllPhotosByAlbumId');
 			throw error;
 		}
 	};
