@@ -10,7 +10,6 @@ const router = new express.Router();
 const storageConfig = multer.diskStorage({
 	destination: (req, file, cb) => {
 		const { ownerId, albumId } = req.body;
-		// console.log(ownerId);
 		let newPath = '';
 		if (albumId) {
 			newPath = path.join(

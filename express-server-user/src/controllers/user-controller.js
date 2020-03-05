@@ -5,7 +5,10 @@ class UserController {
 	constructor() {}
 	getUser = async (req, res) => {
 		try {
-			const result = await user_service.get();
+			const result = await user_service.get(
+				req.query.page,
+				req.query.usersPerPage
+			);
 			res.send(result);
 		} catch (e) {
 			res.status(400).send({ error: e.message });

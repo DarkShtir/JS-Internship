@@ -61,9 +61,11 @@ class PhotoController {
 	};
 	getAllPhotosByAlbumId = async (req, res) => {
 		try {
-			console.log(req.params.albumId);
 			const result = await photo_service.getAllPhotosByAlbumId(
-				req.params.albumId
+				req.params.albumId,
+				req.query.page,
+				req.query.photosPerPage,
+				req.query.filter
 			);
 			res.status(201).send(result);
 		} catch (error) {

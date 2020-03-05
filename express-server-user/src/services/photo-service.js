@@ -34,9 +34,6 @@ class PhotoService {
 			if (!files) {
 				throw new Error('Ошибка при загрузке файла!!');
 			}
-			// console.log('files:', files);
-			// console.log('ownerId:', ownerId);
-			// console.log('albumId:', albumId);
 			let fileNames = [];
 			files.map(async file => {
 				const dimension = sizeOf(file.path);
@@ -119,10 +116,20 @@ class PhotoService {
 			throw error;
 		}
 	};
-	getAllPhotosByAlbumId = async function(albumId) {
+	getAllPhotosByAlbumId = async function(albumId, page, photosPerPage, filter) {
 		try {
-			console.log(albumId);
-			return await Photo.find({ albumId: albumId });
+			if (filter === 'true') {
+				return await Photo.find({
+					albumId: albumId,
+					$expr: { $eq: ['$width', '$height'] },
+				})
+					.skip(photosPerPage * page - photosPerPage)
+					.limit(+photosPerPage);
+			} else {
+				return await Photo.find({ albumId: albumId })
+					.skip(photosPerPage * page - photosPerPage)
+					.limit(+photosPerPage);
+			}
 		} catch (error) {
 			console.log('Error in Photo service, method getAllPhotosByAlbumId');
 			throw error;

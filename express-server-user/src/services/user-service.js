@@ -17,9 +17,12 @@ class UserService {
 		}
 	};
 
-	get = async function() {
+	get = async function(page, usersPerPage) {
 		try {
-			return await User.find({});
+			const users = await User.find({})
+				.skip(usersPerPage * page - usersPerPage)
+				.limit(+usersPerPage);
+			return users;
 		} catch (error) {
 			console.log('Error in User service, method get');
 			throw error;
