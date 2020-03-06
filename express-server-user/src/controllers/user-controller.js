@@ -81,5 +81,13 @@ class UserController {
 			res.status(400).send({ error: e.message });
 		}
 	};
+	getAllUserByName = async (req, res) => {
+		try {
+			const result = await user_service.getAllUserByName(req.query.name);
+			res.send(result);
+		} catch (e) {
+			res.status(400).send({ error: e.message });
+		}
+	};
 }
 module.exports = UserController;

@@ -8,6 +8,7 @@ const user_controller = new UserController();
 
 const router = new express.Router();
 
+router.get('/search', user_controller.getAllUserByName);
 router.get('/:id', user_controller.getUserId);
 router.get('/', user_controller.getUser);
 router.post('/', valid(userValid), user_controller.addUser);

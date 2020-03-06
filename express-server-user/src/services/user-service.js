@@ -109,6 +109,18 @@ class UserService {
 		});
 		await req.user.save();
 	};
+
+	getAllUserByName = async function(name) {
+		try {
+			const users = await User.find({
+				firstName: { $regex: `^${name}\.*`, $options: `i` },
+			});
+			return users;
+		} catch (error) {
+			console.log('Error in User service, method getAllUserByName');
+			throw error;
+		}
+	};
 }
 
 module.exports = UserService;
