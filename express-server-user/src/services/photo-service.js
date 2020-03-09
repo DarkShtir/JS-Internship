@@ -1,6 +1,7 @@
 const sizeOf = require('image-size');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const Photo = require('../models/photo-model');
 
@@ -118,17 +119,73 @@ class PhotoService {
 	};
 	getAllPhotosByAlbumId = async function(albumId, page, photosPerPage, filter) {
 		try {
+			const skip = photosPerPage * page - photosPerPage;
+			const limit = +photosPerPage || 5;
 			if (filter === 'true') {
-				return await Photo.find({
-					albumId: albumId,
-					$expr: { $eq: ['$width', '$height'] },
-				})
-					.skip(photosPerPage * page - photosPerPage)
-					.limit(+photosPerPage);
+				// return await Photo.find({
+				// 	albumId: albumId,
+				// 	$expr: { $eq: ['$width', '$height'] },
+				// })
+				// 	.skip(photosPerPage * page - photosPerPage)
+				// 	.limit(+photosPerPage);
+				return await Photo.aggregate([
+					{
+						$facet: {
+							photos: [
+								{ $match: { albumId: mongoose.Types.ObjectId(albumId) } },
+								{ $match: { $expr: { $eq: ['$width', '$height'] } } },
+							],
+							totalCount: [
+								{ $match: { albumId: mongoose.Types.ObjectId(albumId) } },
+								{ $match: { $expr: { $eq: ['$width', '$height'] } } },
+								{ $count: 'amountCount' },
+							],
+						},
+					},
+					{ $unwind: '$photos' },
+					{
+						$replaceRoot: {
+							newRoot: {
+								$mergeObjects: [
+									'$photos',
+									{ totalCount: '$totalCount.amountCount' },
+								],
+							},
+						},
+					},
+					{ $skip: skip },
+					{ $limit: limit },
+				]);
 			} else {
-				return await Photo.find({ albumId: albumId })
-					.skip(photosPerPage * page - photosPerPage)
-					.limit(+photosPerPage);
+				return await Photo.aggregate([
+					{
+						$facet: {
+							photos: [
+								{ $match: { albumId: mongoose.Types.ObjectId(albumId) } },
+							],
+							totalCount: [
+								{ $match: { albumId: mongoose.Types.ObjectId(albumId) } },
+								{ $count: 'amountCount' },
+							],
+						},
+					},
+					{ $unwind: '$photos' },
+					{
+						$replaceRoot: {
+							newRoot: {
+								$mergeObjects: [
+									'$photos',
+									{ totalCount: '$totalCount.amountCount' },
+								],
+							},
+						},
+					},
+					{ $skip: skip },
+					{ $limit: limit },
+				]);
+				// return await Photo.find({ albumId: albumId })
+				// 	.skip(photosPerPage * page - photosPerPage)
+				// 	.limit(+photosPerPage);
 			}
 		} catch (error) {
 			console.log('Error in Photo service, method getAllPhotosByAlbumId');
