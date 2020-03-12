@@ -15,6 +15,7 @@ app.use('/pets', router.petRouter);
 app.use('/upload', router.fileRouter);
 app.use('/album', router.albumRouter);
 app.use('/photo', router.photoRouter);
+app.use('/dialogs', router.dialogRouter);
 
 async function start() {
 	try {
