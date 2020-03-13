@@ -2,10 +2,13 @@ const { Schema, model } = require('mongoose');
 
 const dialogSchema = new Schema(
 	{
-		members: {
-			type: [],
-			required: true,
-		},
+		members: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'User',
+				required: true,
+			},
+		],
 	},
 	{
 		timestamps: { createdAt: 'createData', updatedAt: 'updateData' },

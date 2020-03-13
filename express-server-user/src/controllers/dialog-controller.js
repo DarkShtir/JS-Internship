@@ -38,6 +38,17 @@ class DialogController {
 			res.status(400).send({ error: error.message });
 		}
 	};
+	getMessagesByDialogId = async (req, res) => {
+		try {
+			console.log('controller', req.query.dialogId);
+			const result = await dialog_service.getMessagesByDialogId(
+				req.query.dialogId
+			);
+			res.status(200).send(result);
+		} catch (error) {
+			res.status(400).send({ error: error.message });
+		}
+	};
 }
 
 module.exports = DialogController;

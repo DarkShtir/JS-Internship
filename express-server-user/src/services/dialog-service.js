@@ -1,4 +1,6 @@
 const Dialog = require('../models/dialog-model');
+const Message = require('../models/message-model');
+const mongoose = require('mongoose');
 
 class DialogService {
 	constructor() {}
@@ -6,6 +8,7 @@ class DialogService {
 	create = async function(body) {
 		const dialog = new Dialog(body);
 		try {
+			console.log('dialog', dialog);
 			await dialog.save();
 			return dialog;
 		} catch (error) {
@@ -40,7 +43,22 @@ class DialogService {
 	// };
 	getDialogsByUserId = async function(id) {
 		try {
-			const dialog = await Dialog.find({ members: id });
+			// const dialog = await Dialog.find({ members: id });
+			const dialog = await Dialog.aggregate([
+				{
+					$match: {
+						members: mongoose.Types.ObjectId(id),
+					},
+				},
+				{
+					$lookup: {
+						from: 'users',
+						localField: 'members',
+						foreignField: '_id',
+						as: 'members',
+					},
+				},
+			]);
 			if (!dialog) {
 				throw new Error(`Диалога с данным ID ${id}, не найдено!!!`);
 			}
@@ -52,14 +70,42 @@ class DialogService {
 	};
 	getDialogByMembersId = async function(firstId, secondId) {
 		try {
-			const dialog = await Dialog.findOne({ members: [firstId, secondId] });
-			// console.log(dialog);
-			// if (!dialog) {
-			// 	throw new Error(`Диалога c данными пользователями, не найдено!!!`);
-			// }
-			return dialog;
+			// const dialog = await Dialog.findOne({ members: [firstId, secondId] });
+
+			const newDialog = await Dialog.aggregate([
+				{
+					$match: {
+						members: {
+							$all: [
+								mongoose.Types.ObjectId(firstId),
+								mongoose.Types.ObjectId(secondId),
+							],
+							$size: 2,
+						},
+					},
+				},
+				{
+					$lookup: {
+						from: 'users',
+						localField: 'members',
+						foreignField: '_id',
+						as: 'members',
+					},
+				},
+			]);
+			return newDialog;
 		} catch (error) {
 			console.log('Error in Dialog service, method getDialogByMembersId');
+			throw error;
+		}
+	};
+	getMessagesByDialogId = async function(dialogId) {
+		try {
+			console.log(dialogId);
+			const messages = await Message.find({ dialogId: dialogId });
+			return messages;
+		} catch (error) {
+			console.log('Error in Dialog service, method getMessagesByDialogId');
 			throw error;
 		}
 	};
