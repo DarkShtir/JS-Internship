@@ -9,6 +9,10 @@ const dialogSchema = new Schema(
 				required: true,
 			},
 		],
+		name: {
+			type: String,
+			default: 'Private Dialog',
+		},
 	},
 	{
 		timestamps: { createdAt: 'createData', updatedAt: 'updateData' },

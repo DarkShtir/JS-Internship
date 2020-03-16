@@ -6,6 +6,10 @@ const messageSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		name: {
+			type: String,
+			required: true,
+		},
 		ownerId: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',

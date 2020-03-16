@@ -8,7 +8,7 @@ class DialogService {
 	create = async function(body) {
 		const dialog = new Dialog(body);
 		try {
-			console.log('dialog', dialog);
+			// console.log('dialog', dialog);
 			await dialog.save();
 			return dialog;
 		} catch (error) {
@@ -101,7 +101,7 @@ class DialogService {
 	};
 	getMessagesByDialogId = async function(dialogId) {
 		try {
-			console.log(dialogId);
+			// console.log(dialogId);
 			const messages = await Message.find({ dialogId: dialogId });
 			return messages;
 		} catch (error) {

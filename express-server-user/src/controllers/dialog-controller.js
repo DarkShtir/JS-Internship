@@ -40,7 +40,7 @@ class DialogController {
 	};
 	getMessagesByDialogId = async (req, res) => {
 		try {
-			console.log('controller', req.query.dialogId);
+			// console.log('controller', req.query.dialogId);
 			const result = await dialog_service.getMessagesByDialogId(
 				req.query.dialogId
 			);
